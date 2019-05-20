@@ -9,7 +9,8 @@ class Slider {
     this.sliderCardWidth=this.slider.querySelector('.card').offsetWidth;
     // pour savoir combien il y a d'items
     this.numberItems = this.slider.querySelectorAll('.card').length
-
+    this.cards = this.slider.querySelectorAll('.card')
+    this.css= document.createElement('style')
     this.arrowNext
     this.arrowPrev
     this.arrowNav
@@ -26,9 +27,16 @@ class Slider {
     this.sliderContainer= document.createElement('div')
     this.sliderContainer.classList.add('sliderContainer')
     this.sliderContainer.style.width= this.numberItems*this.sliderCardWidth +'px'
-    this.sliderContainer.innerHTML = this.slider.innerHTML
+
+
     this.slider.innerHTML= '';
     this.slider.appendChild(this.sliderContainer)
+
+    for(let i=0; i<this.cards.length; i++)
+    {
+      this.sliderContainer.appendChild(this.cards[i])
+    }
+
 
     // ajout des fleches
 
@@ -44,11 +52,19 @@ class Slider {
     this.arrowPrev.classList.add('arrowPrev')
     this.arrowNav.appendChild(this.arrowPrev)
 
+    //ajout du style
+    this.slider.appendChild(this.css)
+
     this.arrowNext.addEventListener('click',()=>
     {
       this.currentPosition = this.currentPosition + this.sliding
       let toSlide = this.sliderCardWidth*this.currentPosition
-      this.sliderContainer.style.transform= 'translateX(-'+toSlide+'px)'
+      console.log(this.cards)
+      this.cards.forEach(function(element, index, array) {
+        console.log(element)
+        element.style.transform= 'translateX(-'+toSlide+'px)'
+      })
+      this.css.innerHTML= '.sliderContainer .card:hover {transform:translate(-'+toSlide+'px, 4px)}'
       this.hideArrow()
     })
 
@@ -56,7 +72,12 @@ class Slider {
     {
       this.currentPosition = this.currentPosition - this.sliding
       let toSlide = this.sliderCardWidth*this.currentPosition
-      this.sliderContainer.style.transform= 'translateX(-'+toSlide+'px)'
+
+      this.cards.forEach(function(element, index, array) {
+
+        element.style.transform= 'translateX(-'+toSlide+'px)'
+      })
+
       this.hideArrow()
     })
   }
